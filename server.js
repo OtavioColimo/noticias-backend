@@ -70,11 +70,27 @@ app.post("/noticias", (req, res) => {
   res.status(201).json({ mensagem: "Notícia criada", noticia: novaNoticia });
 });
 
+// PUT: atualizar notícia
+app.put("/noticias/:id", (req, res) => {
+  const noticia = noticias.find(n => n.id == req.params.id);
+  if (!noticia) {
+    return res.status(404).json({ erro: "Notícia não encontrada" });
+  }
+
+  const { titulo, descricao, categoria } = req.body;
+
+  if (titulo) noticia.titulo = titulo;
+  if (descricao) noticia.descricao = descricao;
+  if (categoria) noticia.categoria = categoria;
+
+  res.json({ mensagem: "Notícia atualizada", noticia });
+});
+
 // Health check
 app.get("/", (req, res) => {
   res.json({
     status: "Backend de Notícias rodando com CI/CD",
-    versao: "1.0.1",
+    versao: "1.1.0",
     cors_ativo: true,
     frontend_integrado: true
   });
