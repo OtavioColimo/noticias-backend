@@ -6,9 +6,14 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(express.json());
 
-// CORS configurado para aceitar frontend da Vercel
+// CORS configurado para aceitar frontend da Vercel e Codespaces
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || "*",
+  origin: [
+    "https://noticias-frontend-lime.vercel.app", // Produção - Vercel
+    "https://*.github.dev", // Codespaces
+    "http://localhost:3000", // Local
+    "http://localhost:5173", // Local (Vite)
+  ],
   methods: "GET,POST,PUT,DELETE",
   allowedHeaders: "Content-Type,Authorization"
 };
@@ -93,6 +98,17 @@ app.get("/", (req, res) => {
     versao: "1.1.0",
     cors_ativo: true,
     frontend_integrado: true
+  });
+});
+
+// Rota API v1
+app.get("/v1", (req, res) => {
+  const agora = new Date();
+  const data_formatada = agora.toLocaleString("pt-BR");
+  
+  res.json({
+    message: "Api v1 respondendo no container docker...",
+    chamada_em: data_formatada
   });
 });
 
